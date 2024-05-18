@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1716061905 source:c:\oleg\c++\gpu_opencl_wrapper\main.cpp
+	<iostream>
+	<my_gpu.hpp>
+
+1716060051 c:\oleg\c++\gpu_opencl_wrapper\my_gpu.hpp
+	<CL/cl.hpp>
+	<fstream>
+	<iostream>
+	<vector>
+	<map>
+
+1716060003 source:c:\oleg\c++\gpu_opencl_wrapper\my_gpu.cpp
+	"my_gpu.hpp"
+
