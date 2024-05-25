@@ -1,0 +1,1 @@
+a class for more convenient code execution on a video card using the opencl library
