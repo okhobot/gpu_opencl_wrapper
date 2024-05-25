@@ -40,16 +40,17 @@ public:
     void set_variable(std::string key,cl::Buffer* variable);
 
 
-    void write_variable(std::string key, size_t bufsize, std::vector<custom_type> &data);
-    void write_variable(std::string key, size_t bufsize, std::vector<int> &data);
-    void write_variable(std::string key, size_t bufsize, std::vector<float> &data);
-    void write_variable(std::string key, size_t bufsize, std::vector<unsigned char> &data);
-    void write_variable(std::string key, size_t bufsize, std::string &data);
+    template <typename T>
+    void write_variable(std::string key, size_t bufsize, std::vector<T> &data)
+    {
+        gpu_queue.enqueueWriteBuffer(variables[key], CL_TRUE, 0, bufsize, data.data());
+    }
 
-    void read_variable(std::string key, size_t bufsize, std::vector<custom_type> &data);
-    void read_variable(std::string key, size_t bufsize, std::vector<int> &data);
-    void read_variable(std::string key, size_t bufsize, std::vector<float> &data);
-    void read_variable(std::string key, size_t bufsize, std::vector<unsigned char> &data);
+    template <typename T>
+    void read_variable(std::string key, size_t bufsize, std::vector<custom_type> &data)
+    {
+        gpu_queue.enqueueReadBuffer(variables[key], CL_TRUE, 0, bufsize, data.data());
+    }
 
     void process_gpu(std::string kernel_name, std::vector<std::string> variable_names, std::vector<float> floats, std::vector<int> ints, int s1, int s2=0, int s3=0);
 

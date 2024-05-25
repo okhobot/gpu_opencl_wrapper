@@ -1,6 +1,6 @@
 #include "my_gpu.hpp"
 
-
+#define print_device_names 1
 using namespace std;
 
 void GPU::operator = (GPU &_gpu)
@@ -22,18 +22,19 @@ void GPU::init_gpu(vector<std::string> kernel_names)
     cl::Platform::get(&platforms);
     std::vector<cl::Device> devices;
 
-    //vector<std::string> kernel_names= {"test_kernel", "fcl_predict_gpu", "fcl_calculate_error_main_lay_gpu", "fcl_calculate_error_gpu",
-    //                              "cnn_predict_gpu", "cnn_calculate_error_main_lay_gpu", "cnn_calculate_error_gpu", "fcl_train_weights_gpu", "cnn_train_weights_gpu", "process_error_gpu", "set_errors_gpu"
-    //                            };
-    /*cout<<"device_names: ";
-    for(int i=0;i<platforms.size();i++)
+    if(print_device_names)
     {
-        devices.clear();
-        platforms[i].getDevices(CL_DEVICE_TYPE_ALL, &devices);
-        for(int j=0;j<devices.size();j++)
-        cout<<devices[j].getInfo<CL_DEVICE_NAME>()<<"; ";
+        std::cout<<"device_names: ";
+        for(int i=0;i<platforms.size();i++)
+        {
+            devices.clear();
+            platforms[i].getDevices(CL_DEVICE_TYPE_ALL, &devices);
+            for(int j=0;j<devices.size();j++)
+            std::cout<<devices[j].getInfo<CL_DEVICE_NAME>()<<"; ";
+        }
+        std::cout<<endl<<"USING_GPU"<<endl;
     }
-    cout<<endl<<"USING_GPU"<<endl;*/
+
 
 
 
@@ -45,7 +46,6 @@ void GPU::init_gpu(vector<std::string> kernel_names)
     cout<<"device initialized"<<endl;
     context=cl::Context(contextDevices);
     cout<<"context initialized"<<endl;
-    //For the selected device create a context and command queue
     gpu_queue=cl::CommandQueue(context, device);
 
 
@@ -80,44 +80,6 @@ void GPU::set_variable(std::string key, cl::Buffer* variable)
     variables[key]=*variable;
 }
 
-
-void GPU::write_variable(std::string key, size_t bufsize, std::vector<custom_type>&data)
-{
-    gpu_queue.enqueueWriteBuffer(variables[key], CL_TRUE, 0, bufsize, data.data());
-}
-void GPU::write_variable(std::string key, size_t bufsize, std::vector<int>&data)
-{
-    gpu_queue.enqueueWriteBuffer(variables[key], CL_TRUE, 0, bufsize, data.data());
-}
-void GPU::write_variable(std::string key, size_t bufsize, std::vector<float>&data)
-{
-    gpu_queue.enqueueWriteBuffer(variables[key], CL_TRUE, 0, bufsize, data.data());
-}
-void GPU::write_variable(std::string key, size_t bufsize, std::vector<unsigned char>&data)
-{
-    gpu_queue.enqueueWriteBuffer(variables[key], CL_TRUE, 0, bufsize, data.data());
-}
-void GPU::write_variable(std::string key, size_t bufsize, std::string &data)
-{
-    gpu_queue.enqueueWriteBuffer(variables[key], CL_TRUE, 0, bufsize, data.c_str());
-}
-
-void GPU::read_variable(std::string key, size_t bufsize, std::vector<custom_type> &data)
-{
-    gpu_queue.enqueueReadBuffer(variables[key], CL_TRUE, 0, bufsize, data.data());
-}
-void GPU::read_variable(std::string key, size_t bufsize, std::vector<int> &data)
-{
-    gpu_queue.enqueueReadBuffer(variables[key], CL_TRUE, 0, bufsize, data.data());
-}
-void GPU::read_variable(std::string key, size_t bufsize, std::vector<float> &data)
-{
-    gpu_queue.enqueueReadBuffer(variables[key], CL_TRUE, 0, bufsize, data.data());
-}
-void GPU::read_variable(std::string key, size_t bufsize, std::vector<unsigned char> &data)
-{
-    gpu_queue.enqueueReadBuffer(variables[key], CL_TRUE, 0, bufsize, data.data());
-}
 
 void GPU::process_gpu(std::string kernel_name, std::vector<std::string> variable_names, std::vector<float> floats, std::vector<int> ints, int s1, int s2, int s3)
 {
