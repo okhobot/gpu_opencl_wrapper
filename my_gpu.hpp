@@ -47,7 +47,7 @@ public:
     }
 
     template <typename T>
-    void read_variable(std::string key, size_t bufsize, std::vector<custom_type> &data)
+    void read_variable(std::string key, size_t bufsize, std::vector<T> &data)
     {
         gpu_queue.enqueueReadBuffer(variables[key], CL_TRUE, 0, bufsize, data.data());
     }
