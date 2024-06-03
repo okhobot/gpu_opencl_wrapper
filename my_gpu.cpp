@@ -16,7 +16,7 @@ void GPU::operator = (GPU &_gpu)
         iArg=_gpu.iArg;
 }
 
-void GPU::init_gpu(vector<std::string> kernel_names)
+void GPU::init_gpu(vector<std::string> kernel_names, std::string dir_path)
 {
     std::vector<cl::Platform> platforms;
     cl::Platform::get(&platforms);
@@ -54,7 +54,7 @@ void GPU::init_gpu(vector<std::string> kernel_names)
     for(int i=0; i<kernel_names.size(); i++)
     {
         if(console_logs)cout<<"initializing the kernel: "<<kernel_names[i]<<endl;
-        sourceFile.open((kernel_names[i]+".cl"));
+        sourceFile.open((dir_path+kernel_names[i]+".cl"));
         sourceCode=std::string(std::istreambuf_iterator<char>(sourceFile),(std::istreambuf_iterator<char>()));
         source= cl::Program::Sources(1, std::make_pair(sourceCode.c_str(), sourceCode.length()+1));
         program = cl::Program(context, source);

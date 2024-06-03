@@ -30,7 +30,7 @@ private:
 
 public:
 
-    void init_gpu(std::vector<std::string> kernel_names);
+    void init_gpu(std::vector<std::string> kernel_names, std::string dir_path="");
 
     void operator = (GPU &_gpu);
 
