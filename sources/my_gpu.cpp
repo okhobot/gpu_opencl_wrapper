@@ -16,7 +16,7 @@ void GPU::operator = (GPU &_gpu)
         iArg=_gpu.iArg;
 }
 
-void GPU::init_gpu(vector<std::string> kernel_names, std::string dir_path)
+void GPU::init_gpu(vector<std::string> kernel_names,std::string dir_path)
 {
     std::vector<cl::Platform> platforms;
     cl::Platform::get(&platforms);
@@ -55,6 +55,7 @@ void GPU::init_gpu(vector<std::string> kernel_names, std::string dir_path)
     {
         if(console_logs)cout<<"initializing the kernel: "<<kernel_names[i]<<endl;
         sourceFile.open((dir_path+kernel_names[i]+".cl"));
+        if(sourceFile.peek()==EOF)call_error(0,"init_gpu","loading kernel error", "kernel name: "+dir_path+kernel_names[i]);
         sourceCode=std::string(std::istreambuf_iterator<char>(sourceFile),(std::istreambuf_iterator<char>()));
         source= cl::Program::Sources(1, std::make_pair(sourceCode.c_str(), sourceCode.length()+1));
         program = cl::Program(context, source);
@@ -93,7 +94,7 @@ void GPU::process_gpu(std::string kernel_name, std::vector<std::string> variable
 
     for(int i=0; i<variable_names.size(); i++)
     {
-        if(variables.find(variable_names[i])==variables.end())cout<<"process_gpu - null variable error: "<<kernel_name<<endl;//call_error(1,"process_gpu","null variable error: ",variable_names[i]);
+        if(variables.find(variable_names[i])==variables.end())call_error(1,"process_gpu","null variable error: ",variable_names[i]);
         kernel.setArg(iArg++, variables[variable_names[i]]);
     }
     for(int i=0; i<floats.size(); i++)kernel.setArg(iArg++, floats[i]);
@@ -104,9 +105,3 @@ void GPU::process_gpu(std::string kernel_name, std::vector<std::string> variable
     else gpu_queue.enqueueNDRangeKernel(kernel, cl::NullRange, cl::NDRange(s1,s2,s3));
     gpu_queue.finish();
 }
-
-
-
-
-
-

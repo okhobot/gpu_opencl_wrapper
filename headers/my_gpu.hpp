@@ -6,8 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#define console_logs 1
-#define custom_type double
+#include "debugger.hpp"
 
 class GPU
 {

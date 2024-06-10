@@ -5,7 +5,7 @@
 int main()
 {
     GPU gpu;
-    gpu.init_gpu({"test_kernel"});
+    gpu.init_gpu({"test_kernel"},"kernels/");
 
     std::vector<int> vec(100);
     for(int i=0;i<vec.size();i++)vec[i]=vec.size()-i-1;
