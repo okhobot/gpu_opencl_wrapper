@@ -1,1 +1,1 @@
-a class for more convenient code execution on a video card using the opencl library
+a class for more convenient use of the openсl library at the basic level
